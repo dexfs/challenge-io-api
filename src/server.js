@@ -8,7 +8,7 @@ const cors = require('cors')
 const handleErrors = require('@app/middlewares/handleErrors')
 const { loadEnv } = require('@bootstrap/loadEnvironments')
 const routes = require('@bootstrap/routes')
-
+const db = require('@orm/sequelize/sequelize')
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100 // limit each IP to 100 requests per windowMs
@@ -35,12 +35,13 @@ class Server {
     )
   }
 
-  async connectionPGCreate () {
-    this.connection = null
-  }
-
-  async connectionPGClose () {
-    // await getConnection().close()
+  async databaseConnect () {
+    try {
+      await db.sequelize.authenticate()
+      console.log('Connection to DB has been established successfully.')
+    } catch (err) {
+      console.error('Unable to connect to the database:', err)
+    }
   }
 
   loadRoutes () {
@@ -65,7 +66,7 @@ class Server {
   }
 
   async start () {
-    // await this.connectionPGCreate();
+    await this.databaseConnect()
     this.listen()
     this.logs()
   }
