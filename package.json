@@ -1,0 +1,56 @@
+{
+  "name": "room_challenge",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/bootstrap/index.js",
+    "test": "standard && jest --passWithNoTests --silent --noStackTrace --runInBand",
+    "test:verbose": "jest --passWithNoTests --runInBand",
+    "test:unit": "npm test -- --watch -c jest-unit-config.js",
+    "test:integration": "npm test -- --watch -c jest-integration-config.js",
+    "test:staged": "npm test -- --findRelatedTests",
+    "test:ci": "npm test -- --coverage"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@sentry/node": "^5.20.1",
+    "bcryptjs": "^2.4.3",
+    "class-validator": "^0.12.2",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
+    "express-rate-limit": "^5.1.3",
+    "express-validation": "^3.0.5",
+    "faker": "^4.1.0",
+    "helmet": "^4.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "module-alias": "^2.2.2",
+    "pg": "^8.3.0",
+    "reflect-metadata": "^0.1.13",
+    "sequelize": "^6.3.5",
+    "uuidv4": "^6.2.1"
+  },
+  "devDependencies": {
+    "jest": "^26.2.2",
+    "jest-extended": "^0.11.5",
+    "nodemon": "^2.0.4",
+    "prettier": "^2.0.5",
+    "sqlite3": "^5.0.0",
+    "standard": "^16.0.2",
+    "supertest": "^4.0.2",
+    "husky": "^4.3.0",
+    "lint-staged": "^10.5.1"
+  },
+  "_moduleAliases": {
+    "@root": ".",
+    "@app": "./src/app",
+    "@bootstrap": "./src/bootstrap",
+    "@database": "./src/database",
+    "@config": "./src/config",
+    "@shared": "./src/shared"
+  }
+}
