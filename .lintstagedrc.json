@@ -1,0 +1,6 @@
+{
+  "*.ts": [
+    "standard 'src/**' --fix",
+    "npm run test:staged"
+  ]
+}
