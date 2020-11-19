@@ -1,21 +1,50 @@
-require('reflect-metadata')
-const CreateUserAction = require('@app/actions/CreateUserAction')
-const ServerFactory = require('../../../../server')
+const CreateUserAction = require('../../../../app/actions/CreateUserAction')
+const UsersRepository = require('../../../../app/repositories/UsersRepository')
+const { loadDb, disconnectDb } = require('./../../../__utils')
+const db = require('@orm/sequelize/sequelize')
+
+const clearDatabase = async () => {
+  const model = db.sequelize.model('user')
+  await model.destroy({
+    truncate: true
+  })
+}
 
 describe('CreateUserAction', () => {
   beforeAll(async () => {
-    await ServerFactory.connectionPGCreate()
+    await loadDb()
+  })
+
+  beforeEach(async () => {
+    await clearDatabase()
   })
 
   afterAll(async () => {
-    await ServerFactory.connectionPGClose()
+    await disconnectDb()
   })
 
-  it('should create an user and return user and token', async () => {
-    const action = new CreateUserAction()
+  it('should create an type user and return the token', async () => {
+    const userRepository = new UsersRepository()
+    const action = new CreateUserAction(userRepository)
     const result = await action.execute({
-      username: '__TEST__',
-      password: '123456'
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      password: 'any_password',
+      type: 'user'
+    })
+
+    expect(result).toHaveProperty('token')
+    expect(result.token).not.toBeNull()
+  })
+
+  it('should create an type admin and the token', async () => {
+    const userRepository = new UsersRepository()
+    const action = new CreateUserAction(userRepository)
+    const result = await action.execute({
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      password: 'any_password',
+      type: 'admin'
     })
 
     expect(result).toHaveProperty('token')
@@ -24,7 +53,12 @@ describe('CreateUserAction', () => {
 
   it('should return and error if invalid data passed', async () => {
     const action = new CreateUserAction()
-    const data = { username: '', password: '' }
+    const data = {
+      name: '',
+      email: '',
+      password: '',
+      type: ''
+    }
     await expect(action.execute(data)).rejects.toBeTruthy()
   })
 })
