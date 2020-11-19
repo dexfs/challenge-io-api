@@ -1,16 +1,14 @@
 const { compare } = require('bcryptjs')
-const UserRepository = require('@app/repositories/UsersRepository')
-const User = require('@app/entities/User')
 const TokenService = require('@app/services/tokenService')
 const { Unauthorized } = require('@app/exceptions/errors')
-const AbstractAction = require('./ActionAbstract')
-class AuthenticateAction extends AbstractAction {
-  async execute ({ username, password }) {
-    const { userRepository } = this.loadRepositories()
-    const user = await userRepository.findOne({
-      where: { username },
-      select: ['id', 'username', 'password']
-    })
+
+class AuthenticateAction {
+  constructor (repository) {
+    this.repository = repository
+  }
+
+  async execute ({ email, password }) {
+    const user = await this.repository.findByEmail(email)
 
     if (!user) {
       throw new Unauthorized('Your username and/or password do not match.')
@@ -26,12 +24,6 @@ class AuthenticateAction extends AbstractAction {
     const token = tokenService.generate(user)
     return {
       token
-    }
-  }
-
-  loadRepositories () {
-    return {
-      userRepository: getCustomRepository(UserRepository)
     }
   }
 }
