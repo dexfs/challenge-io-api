@@ -1,24 +1,11 @@
-import { getCustomRepository } from 'typeorm';
-
-import UserRepository from '@app/repositories/UsersRepository';
-import AbstractAction from './ActionAbstract';
-
-interface Input {
-  id: string;
-}
-
-class DeleteUserAction extends AbstractAction {
-  public async execute({ id }: Input): Promise<void> {
-    const { userRepository } = this.loadRepositories();
-    await userRepository.delete(id);
+class DeleteUserAction {
+  constructor (repository) {
+    this.repository = repository
   }
 
-  loadRepositories() {
-    return {
-      userRepository: getCustomRepository(UserRepository)
-    }
-
+  async execute ({ id }) {
+    await this.repository.delete(id)
   }
 }
 
-export default DeleteUserAction;
+module.exports = DeleteUserAction

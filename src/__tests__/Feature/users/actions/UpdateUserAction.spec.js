@@ -1,54 +1,68 @@
-require('reflect-metadata')
-
-const CreateUsersSeeder = require('@database/seeds/CreateUsersSeeder')
+const bcrypt = require('bcryptjs')
 const UpdateUserAction = require('@app/actions/UpdateUserAction')
 const UsersRepository = require('@app/repositories/UsersRepository')
+const db = require('@orm/sequelize/sequelize')
 
-const ServerFactory = require('../../../../server')
+const { loadDb, disconnectDb, clearDatabase } = require('./../../../__utils')
+
+const makeUser = async (input) => {
+  const modelUser = db.sequelize.model('user')
+  const passwordHash = await bcrypt.hash(input.password, 12)
+  return await modelUser.create({ ...input, password: passwordHash })
+}
 
 describe('UpdateUserAction', () => {
-  beforeAll(async done => {
-    await ServerFactory.connectionPGCreate()
-    await useSeeding({ connection: 'test' })
-    done()
-  })
-  beforeEach(async done => {
-    await runSeeder(CreateUsersSeeder)
-    done()
+  beforeAll(async () => {
+    await loadDb()
   })
 
-  afterAll(async done => {
-    await tearDownDatabase()
-    done()
+  beforeEach(async () => {
+    await clearDatabase()
+  })
+
+  afterAll(async () => {
+    await disconnectDb()
   })
 
   it('should update an user', async () => {
-    const userRepository = getCustomRepository(UsersRepository)
-    const action = new UpdateUserAction()
-    const users = await userRepository.find()
-    const user = users[Math.floor(Math.random() * users.length)]
-    const userUpdate = {
-      mobileToken: 'token_updated',
-      id: user.id
+    const userData = {
+      name: 'any_name',
+      email: 'any_mail@mail.com',
+      password: 'any_password',
+      currentPassword: 'any_password',
+      type: 'user'
     }
-    await action.execute(userUpdate)
+    const userTest = await makeUser(userData)
+    const userRepository = new UsersRepository()
+    const action = new UpdateUserAction(userRepository)
 
-    const userUpdated = await userRepository.findOne({ id: user.id })
+    await action.execute({ ...userTest.toJSON(), name: 'update_name' })
 
-    expect(userUpdated).not.toBeNull()
-    expect(userUpdated?.mobileToken).toBe(userUpdate.mobileToken)
+    const userUpdated = await userRepository.get(userTest.id)
+    expect(userUpdated.toJSON()).not.toBeNull()
+    expect(userUpdated.name).toBe('update_name')
+    expect(userUpdated.password).not.toBe('any_password')
   })
 
   it('should update the user password', async () => {
-    const userRepository = getCustomRepository(UsersRepository)
-    const action = new UpdateUserAction()
-    const users = await userRepository.find()
-    const user = users[Math.floor(Math.random() * users.length)]
-    const userUpdate = {
-      currentPassword: '12345678',
-      newPassword: 'passwupdated',
-      id: user.id
+    const userData = {
+      name: 'any_name',
+      email: 'any_mail@mail.com',
+      password: 'any_password',
+      type: 'user'
     }
-    await expect(action.execute(userUpdate)).resolves.toBeTruthy()
+
+    const userTest = await makeUser(userData)
+
+    const userRepository = new UsersRepository()
+    const action = new UpdateUserAction(userRepository)
+    const userUpdate = {
+      currentPassword: 'any_password',
+      newPassword: 'passwupdated',
+      id: userTest.id
+    }
+    const result = await action.execute(userUpdate)
+    const isChangedPassword = await bcrypt.compare(userUpdate.newPassword, result.password)
+    expect(isChangedPassword).toBe(true)
   })
 })
