@@ -1,54 +1,38 @@
-import { getCustomRepository } from 'typeorm';
+const bcrypt = require('bcryptjs')
+const TokenService = require('../../../src/app/services/tokenService')
+const { GeneralError } = require('../../../src/app/exceptions/errors')
+class CreateUserAction {
+  constructor (repository) {
+    this.repository = repository
+  }
 
-import UserRepository from '@app/repositories/UsersRepository';
-import TokenService from '@app/services/tokenService';
-import { GeneralError } from '@app/exceptions/errors';
-import User from '@app/entities/User';
-import AbstractAction from './ActionAbstract';
-
-interface Input {
-  username: string;
-  password: string;
-  mobileToken?: string;
-}
-
-interface Result {
-  token: string;
-}
-
-class CreateUserAction  extends AbstractAction {
-  public async execute({
-    username,
+  async execute ({
+    name,
+    email,
     password,
-    mobileToken,
-  }: Input): Promise<Result> {
-    const {userRepository} = this.loadRepositories();
-    const userExists = await userRepository.findByUsername(username);
+    type
+  }) {
+    const userExists = await this.repository.findByEmail(email)
 
     if (userExists) {
-      throw new GeneralError(`Oh no!, this ${username} already used`);
+      throw new GeneralError('Oh no!, this user already exists')
     }
 
-    const user = await userRepository.create({
-      username,
-      password,
-      mobileToken,
-    });
+    const encryptedPassword = await bcrypt.hash(password, 12)
 
-    await userRepository.save(user);
+    const user = await this.repository.create({
+      name,
+      email,
+      password: encryptedPassword,
+      type
+    })
 
-    const tokenService = new TokenService();
-    const token = tokenService.generate(user);
+    const tokenService = new TokenService()
+    const token = tokenService.generate(user)
     return {
-      token,
-    };
-  }
-
-  loadRepositories() {
-    return {
-      userRepository: getCustomRepository(UserRepository)
+      token
     }
   }
 }
 
-export default CreateUserAction;
+module.exports = CreateUserAction
