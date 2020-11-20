@@ -1,4 +1,3 @@
-const { Request, Response, NextFunction } = require('express')
 const { ValidationError } = require('express-validation')
 const { GeneralError } = require('@app/exceptions/errors')
 
@@ -8,6 +7,7 @@ module.exports = (
   res,
   next
 ) => {
+  // console.log({ err })
   if (err instanceof GeneralError) {
     return res.status(err.getCode()).json({
       status: err.name,
@@ -23,5 +23,4 @@ module.exports = (
     status: 'error',
     message: err.message
   })
-  next(err)
 }

@@ -1,34 +1,29 @@
-import { Request, Response, NextFunction } from 'express';
-import { verify } from 'jsonwebtoken';
-import authConfig from '@config/auth';
-import IUserToken from '@app/interfaces/IUserToken';
+const { verify } = require('jsonwebtoken')
+const authConfig = require('@config/auth')
 
-interface IToken {
-  user: IUserToken;
+const decodeToken = (token) => {
+  return verify(token, authConfig.jwt.secret)
 }
-const decodeToken = (token: string) => {
-  return verify(token, authConfig.jwt.secret);
-};
 
 const isAuthorized = (
-  request: Request,
-  response: Response,
-  next: NextFunction,
-): Response | undefined => {
-  const requestToken = request.headers.authorization;
+  request,
+  response,
+  next
+) => {
+  const requestToken = request.headers.authorization
 
   if (!requestToken) {
-    return response.status(401).json({ message: 'Missing token.' });
+    return response.status(401).json({ message: 'Missing token.' })
   }
 
   try {
-    const [, token] = requestToken.split(' ');
-    const decoded = decodeToken(token) as IToken;
-    request.user = decoded.user;
-    next();
+    const [, token] = requestToken.split(' ')
+    const decoded = decodeToken(token)
+    request.user = decoded.user
+    next()
   } catch (error) {
-    return response.status(401).json({ message: 'Invalid token!' });
+    return response.status(401).json({ message: 'Invalid token!' })
   }
-};
+}
 
-export default isAuthorized;
+module.exports = isAuthorized
