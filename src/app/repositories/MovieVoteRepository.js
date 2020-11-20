@@ -1,14 +1,15 @@
 const AbstractRepository = require('./AbstractRepository')
 const db = require('@orm/sequelize/sequelize')
-class UsersRepository extends AbstractRepository {
+
+class MovieVoteRepository extends AbstractRepository {
   constructor () {
     super()
-    this.model = db.sequelize.model('user')
+    this.model = db.sequelize.model('movie_vote')
   }
 
   async create (input) {
-    const user = this.model.create(input)
-    return user
+    const movie = this.model.create(input)
+    return movie
   }
 
   async update (id, input) {
@@ -26,20 +27,6 @@ class UsersRepository extends AbstractRepository {
   async all () {
     return this.model.findAll()
   }
-
-  async findByEmail (email) {
-    const query = { where: { email } }
-
-    return this.model.findOne(query)
-  }
-
-  async findByUsername (
-    name
-  ) {
-    const query = { where: { name } }
-
-    return this.model.findOne(query)
-  }
 }
 
-module.exports = UsersRepository
+module.exports = MovieVoteRepository
