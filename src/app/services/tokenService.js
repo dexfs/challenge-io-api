@@ -1,17 +1,21 @@
-import { sign } from 'jsonwebtoken';
-import authConfig from '@config/auth';
-import IUserToken from '@app/interfaces/IUserToken';
+const { sign, verify } = require('jsonwebtoken')
+const authConfig = require('@config/auth')
 
 class TokenService {
-  generate(subject: IUserToken): string {
-    const { secret, expiresIn } = authConfig.jwt;
-    const { username, mobileToken, id } = subject;
-    const token = sign({ user: { username, mobileToken, id } }, secret, {
-      expiresIn,
-    });
+  generate (subject) {
+    const { secret, expiresIn } = authConfig.jwt
+    const { name, email, type, id } = subject
+    const token = sign({ user: { name, email, type, id } }, secret, {
+      expiresIn
+    })
 
-    return token;
+    return token
+  }
+
+  decrypt (token) {
+    const decoded = verify(token, authConfig.jwt.secret)
+    return decoded
   }
 }
 
-export default TokenService;
+module.exports = TokenService
