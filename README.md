@@ -1,4 +1,4 @@
-# Challenge
+# Challenge ![Challenge ioasys](https://github.com/dexfs/challenge-io-api/workflows/Challenge%20ioasys/badge.svg?branch=master)
 ## ❯ Table of contents
 
 - [Requirements](#-requirements)
