@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "@types/sequelize": "^4.28.9",
+    "babel-plugin-module-resolver": "^4.0.0",
     "husky": "^4.3.0",
     "jest": "^26.2.2",
     "jest-extended": "^0.11.5",
@@ -55,5 +56,10 @@
     "@database": "./src/database",
     "@config": "./src/config",
     "@shared": "./src/shared"
+  },
+  "standard": {
+    "env": [
+      "jest"
+    ]
   }
 }
