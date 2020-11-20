@@ -2,12 +2,6 @@ const AbstractRepository = require('./AbstractRepository')
 const db = require('@orm/sequelize/sequelize')
 const { Op } = require('sequelize')
 
-const withAverageVotes = (movies) => {
-  return movies.map(movie => {
-    return getAverageVote(movie)
-  })
-}
-
 const getAverageVote = async (movie) => {
   const totalVotes = movie.votes.length
 

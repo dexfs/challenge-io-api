@@ -1,4 +1,4 @@
-const { sign, verify } = require('jsonwebtoken')
+const { sign } = require('jsonwebtoken')
 const authConfig = require('@config/auth')
 
 class TokenService {
@@ -10,11 +10,6 @@ class TokenService {
     })
 
     return token
-  }
-
-  decrypt (token) {
-    const decoded = verify(token, authConfig.jwt.secret)
-    return decoded
   }
 }
 
