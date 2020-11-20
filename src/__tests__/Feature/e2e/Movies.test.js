@@ -52,7 +52,7 @@ describe('Movies - e2e', () => {
     done()
   })
 
-  test('Register user type user ', async done => {
+  test('Register a movie ', async done => {
     expect.assertions(1)
     const tokenService = new TokenService()
     const user = await makeUser('admin')

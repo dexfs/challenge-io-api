@@ -26,6 +26,7 @@ const getAverageVote = async (movie) => {
 
 const buildQuery = (query) => {
   const where = {}
+  if (!query?.filter) return null
   Object.entries(query.filter).map(([field, value], key) => {
     console.log(field, value)
     where[field] = {
@@ -33,8 +34,12 @@ const buildQuery = (query) => {
     }
     return where
   })
-  console.log({ where })
-  return { where }
+
+  if (Object.values(where).length > 0) {
+    return { where }
+  }
+
+  return null
 }
 
 class MovieRepository extends AbstractRepository {
@@ -65,8 +70,9 @@ class MovieRepository extends AbstractRepository {
 
   async all (query = null) {
     const filter = buildQuery(query)
+    console.dir(filter)
     const result = await this.model.findAll({ ...filter, include: ['votes', 'cast'] })
-    return await withAverageVotes(result)
+    return result
   }
 }
 

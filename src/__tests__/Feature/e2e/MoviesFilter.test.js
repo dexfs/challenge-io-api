@@ -2,37 +2,13 @@ require('jest-extended')
 const TokenService = require('@app/services/tokenService')
 const { startTestServer, clearDatabase, makeUser, makeMovie } = require('./../../__utils')
 const ServerFactory = require('../../../server')
-const db = require('@orm/sequelize/sequelize')
+// const db = require('@orm/sequelize/sequelize')
 
 const makeAuth = async (type) => {
   const tokenService = new TokenService()
   const user = await makeUser(type)
   const token = tokenService.generate(user)
   return token
-}
-
-const makeMovieAndVotes = async (user) => {
-  const inputMovie = {
-    title: 'any_title',
-    genre: 'any_genre',
-    director: 'any_director'
-  }
-
-  const modelMovie = db.sequelize.model('movie')
-
-  const modelVote = db.sequelize.model('movie_vote')
-  const movie = await modelMovie.create(inputMovie)
-  await modelVote.create({
-    movieId: movie.id,
-    userId: user.id,
-    value: 1
-  })
-  await modelVote.create({
-    movieId: movie.id,
-    userId: user.id,
-    value: 4
-  })
-  return movie
 }
 
 describe('Movies - e2e', () => {

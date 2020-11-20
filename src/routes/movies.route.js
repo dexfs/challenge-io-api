@@ -10,7 +10,6 @@ const moviesRouter = Router()
 
 moviesRouter.get(
   '/',
-  isAuthorized,
   MoviesController.all
 )
 
