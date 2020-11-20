@@ -37,10 +37,18 @@ class Server {
 
   async databaseConnect () {
     try {
-      await db.sequelize.authenticate()
+      await db.sequelize.sync()
       console.log('Connection to DB has been established successfully.')
     } catch (err) {
       console.error('Unable to connect to the database:', err)
+    }
+  }
+
+  async databaseCloseConnection () {
+    try {
+      await db.sequelize.close()
+    } catch (err) {
+      console.error('Unable to close the connection:', err)
     }
   }
 
