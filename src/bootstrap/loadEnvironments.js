@@ -3,12 +3,12 @@ const dotenv = require('dotenv')
 const envObj = {
   production: '.env',
   development: '.env.dev',
-  test: ''
+  test: '.env.test'
 }
 
 function loadEnv () {
   let currentEnv = process.env.NODE_ENV
-
+  console.log(currentEnv)
   if (!currentEnv) currentEnv = 'development'
 
   const selectedEnv = envObj[currentEnv]
