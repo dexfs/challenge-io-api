@@ -1,11 +1,11 @@
-// const AuthenticateAction = require('@app/actions/AuthenticateAction');
-
+const AuthenticateAction = require('@app/actions/AuthenticateAction')
+const UsersRepository = require('@app/repositories/UsersRepository')
 class IndexController {
   static async authenticate (request, response) {
-    // const authenticateAction = new AuthenticateAction();
-    // const { token } = await authenticateAction.execute(request.body);
-    // return response.json({ token });
-    return response.json({ ok: 'ok' })
+    const userRepository = new UsersRepository()
+    const authenticateAction = new AuthenticateAction(userRepository)
+    const { token } = await authenticateAction.execute(request.body)
+    return response.json({ token })
   }
 }
 
