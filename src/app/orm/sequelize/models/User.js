@@ -1,7 +1,11 @@
+const { Sequelize } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
   return sequelize.define('user', {
-
-    // attributes
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: Sequelize.UUIDV4, // Or Sequelize.UUIDV1
+      primaryKey: true
+    },
     name: {
       type: DataTypes.STRING,
       allowNull: false
@@ -11,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     type: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.ENUM(['user', 'admin']),
       allowNull: false
     },
     password: {
@@ -19,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     }
   }, {
-    // options
+    timestamps: true,
+    paranoid: true
   })
 }

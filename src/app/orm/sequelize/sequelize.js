@@ -1,4 +1,5 @@
 const { loadEnv } = require('@bootstrap/loadEnvironments')
+console.log('ENV', process.env.NODE_ENV, process.env.DATABASE_URL)
 loadEnv()
 const fs = require('fs')
 const path = require('path')
