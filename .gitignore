@@ -5,4 +5,5 @@ coverage
 .env
 .env.test
 .env.dev
+!.env.example
 TODO.md
