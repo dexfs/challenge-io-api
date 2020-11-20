@@ -29,18 +29,19 @@ services:
     networks:
       - app-network
 
-  # db_test:
-  #   # build: .docker/postgres
-  #   image: postgres:12
-  #   restart: always
-  #   tty: true
-  #   ports:
-  #     - "5433:5432"
-  #   env_file:
-  #     - .env.test # configure postgres
-  #   # command: -p 5433
-  #   networks:
-  #     - app-network
+  db_test:
+    # build: .docker/postgres
+    image: postgres:12
+    restart: always
+    tty: true
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=ioapi_test
+    networks:
+      - app-network
 
 
   # npm:
