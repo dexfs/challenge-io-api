@@ -1,17 +1,16 @@
-import { Router } from 'express'
-import { validate } from 'express-validation'
-import isAuthorized from '@app/middlewares/isAuthorized'
-import UsersController from '@app/http/users/controllers/UsersController'
-import UserRoomsController from '@app/http/users/controllers/UserRoomsController'
+const { Router } = require('express')
+const { validate } = require('express-validation')
+const isAuthorized = require('@app/middlewares/isAuthorized')
+const isAdmin = require('@app/middlewares/isAdmin')
+const UsersController = require('@app/http/users/controllers/UsersController')
 
-import updateUserValidation from '@app/http/requests/updateUserValidation'
-import createUserValidation from '@app/http/requests/createUserValidation'
+const updateUserValidation = require('@app/http/requests/UpdateUserValidation')
+const createUserValidation = require('@app/http/requests/CreateUserValidation')
 
 const usersRouter = Router()
 
 usersRouter.get('/', UsersController.index)
-usersRouter.get('/:username/rooms', UserRoomsController.index)
-usersRouter.get('/:username', UsersController.show)
+// usersRouter.get('/:username', UsersController.show)
 
 usersRouter.post(
   '/register',
@@ -26,6 +25,6 @@ usersRouter.put(
   UsersController.update
 )
 
-usersRouter.delete('/', isAuthorized, UsersController.delete)
+usersRouter.delete('/:userId', isAuthorized, isAdmin, UsersController.delete)
 
-export default usersRouter
+module.exports = usersRouter
