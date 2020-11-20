@@ -34,6 +34,7 @@ module.exports = (sequelize, DataTypes) => {
 
   Movie.associate = function (models) {
     Movie.hasMany(models.movie_vote, { foreignKey: 'movieId', as: 'votes' })
+    Movie.hasMany(models.movie_cast, { foreignKey: 'movieId', as: 'cast' })
   }
   return Movie
 }

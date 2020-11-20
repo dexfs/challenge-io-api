@@ -3,9 +3,10 @@ class GetAllMoviesAction {
     this.repository = repository
   }
 
-  async execute () {
-    const movie = await this.repository.all()
-    return movie
+  async execute (query) {
+    console.dir(query)
+    const movies = await this.repository.all(query)
+    return await Promise.all(movies)
   }
 }
 

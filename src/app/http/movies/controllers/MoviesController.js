@@ -2,10 +2,17 @@ const MovieRepository = require('@app/repositories/MovieRepository')
 const MovieVoteRepository = require('@app/repositories/MovieVoteRepository')
 const CreateMovieAction = require('@app/actions/CreateMovieAction')
 const VoteAction = require('@app/actions/VoteAction')
+const GetAllMoviesAction = require('@app/actions/GetAllMoviesAction')
 
 const movieRepository = new MovieRepository()
 const movieVoteRepository = new MovieVoteRepository()
 class MoviesController {
+  static async all (request, response) {
+    const action = new GetAllMoviesAction(movieRepository)
+    const movies = await action.execute(request.query)
+    return response.status(200).json(movies)
+  }
+
   static async create (request, response) {
     const action = new CreateMovieAction(movieRepository)
     const movie = await action.execute(request.body)

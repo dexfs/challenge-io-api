@@ -8,6 +8,12 @@ const createMovieValidation = require('@app/http/requests/CreateMovieValidation'
 const voteValidation = require('@app/http/requests/VoteValidation')
 const moviesRouter = Router()
 
+moviesRouter.get(
+  '/',
+  isAuthorized,
+  MoviesController.all
+)
+
 moviesRouter.post(
   '/',
   isAuthorized,
