@@ -1,0 +1,270 @@
+{
+	"info": {
+		"_postman_id": "f7350f47-8904-4ab5-8abe-ead57bc6c219",
+		"name": "test-backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Autenticação",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"teste@mail.com\",\n   \"password\": \"abc123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/authenticate",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"authenticate"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "admin@email.com",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "abc123",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Registro de usuário",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Normal User 3\",\n      \"email\": \"user2@mail.com\",\n      \"password\": \"abc123\",\n      \"type\": \"user\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/users/register",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						"register"
+					]
+				},
+				"description": "tipos(types) de usuário\n\nuser | admin"
+			},
+			"response": []
+		},
+		{
+			"name": "Voto no filme",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Im5hbWUiOiJUZXN0ZSBDaGFsbGVuZ2UiLCJlbWFpbCI6InRlc3RlQG1haWwuY29tIiwidHlwZSI6InVzZXIiLCJpZCI6ImUwY2MyNmZiLWRlMmItNDFiOS04NDNjLTJiZDliNDA5MDdlYyJ9LCJpYXQiOjE2MDU4NDQ5ODYsImV4cCI6MTYwNTg3Mzc4Nn0.NIiY2b6DOSVRw5rnaaA0x3Ae1arqfYNbXhRSuPZM15s",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"value\": 2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/movies/39042ccb-c5ad-442a-8e4d-cbdfd8d92f3d/vote",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"movies",
+						"39042ccb-c5ad-442a-8e4d-cbdfd8d92f3d",
+						"vote"
+					]
+				},
+				"description": "Apenas usuários do tipo user podem votar"
+			},
+			"response": []
+		},
+		{
+			"name": "Registro de Filmes",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Im5hbWUiOiJBZG1pbiBVc2VyIiwiZW1haWwiOiJhZG1pbkBtYWlsLmNvbSIsInR5cGUiOiJhZG1pbiIsImlkIjoiNjE5MzU2ZTUtNjI2YS00ZjBmLWEzZjgtNjU3MWQyZDY2YjI0In0sImlhdCI6MTYwNTg0MzM3NywiZXhwIjoxNjA1ODcyMTc3fQ.B_k-raWZ_xc9TR8LQlQg6VY4_t8_Q8f2FXRDB3nI8oU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Titanic 2\",\n      \"genre\": \"romance\",\n      \"director\": \"James Cameron\"\n      \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/movies",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"movies"
+					]
+				},
+				"description": "Apenas usuário admin pode fazer"
+			},
+			"response": []
+		},
+		{
+			"name": "Listagem de usuários",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/users",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users"
+					]
+				},
+				"description": "tipos(types) de usuário\n\nuser | admin"
+			},
+			"response": []
+		},
+		{
+			"name": "Listagem de filmes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/movies",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"movies"
+					]
+				},
+				"description": "tipos(types) de usuário\n\nuser | admin"
+			},
+			"response": []
+		},
+		{
+			"name": "Detalhe do filme",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/movies/39042ccb-c5ad-442a-8e4d-cbdfd8d92f3d",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"movies",
+						"39042ccb-c5ad-442a-8e4d-cbdfd8d92f3d"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Atualização de usuário (apenas usuário logado)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Im5hbWUiOiJBZG1pbiBVc2VyIiwiZW1haWwiOiJhZG1pbkBtYWlsLmNvbSIsInR5cGUiOiJhZG1pbiIsImlkIjoiNjE5MzU2ZTUtNjI2YS00ZjBmLWEzZjgtNjU3MWQyZDY2YjI0In0sImlhdCI6MTYwNTg0MzM3NywiZXhwIjoxNjA1ODcyMTc3fQ.B_k-raWZ_xc9TR8LQlQg6VY4_t8_Q8f2FXRDB3nI8oU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Atualização nome Admin\"    \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/users",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remoção usuário ( usuário admin removendo outro usuário)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Im5hbWUiOiJBZG1pbiBVc2VyIiwiZW1haWwiOiJhZG1pbkBtYWlsLmNvbSIsInR5cGUiOiJhZG1pbiIsImlkIjoiNjE5MzU2ZTUtNjI2YS00ZjBmLWEzZjgtNjU3MWQyZDY2YjI0In0sImlhdCI6MTYwNTg0MzM3NywiZXhwIjoxNjA1ODcyMTc3fQ.B_k-raWZ_xc9TR8LQlQg6VY4_t8_Q8f2FXRDB3nI8oU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/users/94d226d8-fb5f-46c3-a47e-cbb9e53dcfa0",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						"94d226d8-fb5f-46c3-a47e-cbb9e53dcfa0"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
